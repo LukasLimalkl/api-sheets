@@ -2,6 +2,7 @@ package notion
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"log"
 	"os"
@@ -10,27 +11,32 @@ import (
 	"github.com/joho/godotenv"
 )
 
-type Filters struct {
-	campanhas        string
-	cliente          string
-	periodo_campanha string
-}
-
 func ConnectNotion() {
-	err := godotenv.Load(".env")
+	err := godotenv.Load()
 	if err != nil {
 		log.Fatalf("Error loading .env file: %s", err)
 	}
 
-	API_NOTION := os.Getenv("API_NOTION")
-	DB_NOTION := os.Getenv("DB_NOTION")
+	apiKey := os.Getenv("API_NOTION")
+	dbID := os.Getenv("DB_NOTION")
 
-	client := notion.NewClient(API_NOTION)
-	query := &Filters{}
-
-	page, err := client.QueryDatabase(context.Background(), DB_NOTION, query*DatabaseQuery)
-	if err != nil {
-		fmt.Println(err)
+	f := &notion.DatabaseQuery{
+		Filter * &notion.DatabaseQueryFilter{
+			Property: "campanha",
+		},
 	}
-	fmt.Println(page)
+	client := notion.NewClient(apiKey)
+
+	pages, err := client.QueryDatabase(context.Background(), dbID, f)
+	if err != nil {
+		fmt.Println("Error querying database:", err)
+		return
+	}
+
+	b, err := json.Marshal(pages)
+	if err != nil {
+		fmt.Println("error:", err)
+	}
+	os.Stdout.Write(b)
+
 }
