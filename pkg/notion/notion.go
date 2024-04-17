@@ -10,6 +10,12 @@ import (
 	"github.com/joho/godotenv"
 )
 
+type Filters struct {
+	campanhas        string
+	cliente          string
+	periodo_campanha string
+}
+
 func ConnectNotion() {
 	err := godotenv.Load(".env")
 	if err != nil {
@@ -20,8 +26,9 @@ func ConnectNotion() {
 	DB_NOTION := os.Getenv("DB_NOTION")
 
 	client := notion.NewClient(API_NOTION)
+	query := &Filters{}
 
-	page, err := client.FindDatabaseByID(context.Background(), DB_NOTION)
+	page, err := client.QueryDatabase(context.Background(), DB_NOTION, query*DatabaseQuery)
 	if err != nil {
 		fmt.Println(err)
 	}
