@@ -20,10 +20,12 @@ func ConnectNotion() {
 	apiKey := os.Getenv("API_NOTION")
 	dbID := os.Getenv("DB_NOTION")
 
+	filter := &notion.DatabaseQueryFilter{
+		Property: "campanha",
+	}
+
 	f := &notion.DatabaseQuery{
-		Filter * &notion.DatabaseQueryFilter{
-			Property: "campanha",
-		},
+		Filter: filter,
 	}
 	client := notion.NewClient(apiKey)
 
