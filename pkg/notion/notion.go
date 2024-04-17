@@ -7,8 +7,8 @@ import (
 	"log"
 	"os"
 
-	"github.com/dstotijn/go-notion"
 	"github.com/joho/godotenv"
+	"github.com/jomei/notionapi"
 )
 
 func ConnectNotion() {
@@ -20,13 +20,9 @@ func ConnectNotion() {
 	apiKey := os.Getenv("API_NOTION")
 	dbID := os.Getenv("DB_NOTION")
 
-	f := &notion.DatabaseQuery{
-		PageSize: 15,
-	}
+	client := notionapi.NewClient(notionapi.Token(apiKey))
 
-	client := notion.NewClient(apiKey)
-
-	pages, err := client.QueryDatabase(context.Background(), dbID, f)
+	pages, err := client.Database.Get(context.Background(), notionapi.DatabaseID(dbID))
 	if err != nil {
 		fmt.Println("Error querying database:", err)
 		return
