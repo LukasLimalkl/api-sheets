@@ -23,11 +23,11 @@ func ConnectNotion() {
 	client := notion.NewClient(apiKey)
 
 	var allPages []notion.Page
-	var cursor string // Cursor inicial, vazio para a primeira chamada
+	var cursor string
 
 	for {
 		params := &notion.DatabaseQuery{
-			PageSize:    100, // Máximo permitido
+			PageSize:    100,
 			StartCursor: cursor,
 		}
 
