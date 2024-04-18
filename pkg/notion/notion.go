@@ -26,13 +26,11 @@ func ConnectNotion() {
 	var cursor string // Cursor inicial, vazio para a primeira chamada
 
 	for {
-		// Parâmetros da consulta
 		params := &notion.DatabaseQuery{
 			PageSize:    100, // Máximo permitido
 			StartCursor: cursor,
 		}
 
-		// Consulta ao banco de dados
 		response, err := client.QueryDatabase(context.Background(), dbID, params)
 		if err != nil {
 			fmt.Println("Erro ao consultar o banco de dados:", err)
