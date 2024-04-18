@@ -20,22 +20,43 @@ func ConnectNotion() {
 	apiKey := os.Getenv("API_NOTION")
 	dbID := os.Getenv("DB_NOTION")
 
-	f := &notion.DatabaseQuery{
-		PageSize: 15,
-	}
-
 	client := notion.NewClient(apiKey)
 
-	pages, err := client.QueryDatabase(context.Background(), dbID, f)
+	var allPages []notion.Page
+	var cursor string // Cursor inicial, vazio para a primeira chamada
+
+	for {
+		// Parâmetros da consulta
+		params := &notion.DatabaseQuery{
+			PageSize:    100, // Máximo permitido
+			StartCursor: cursor,
+		}
+
+		// Consulta ao banco de dados
+		response, err := client.QueryDatabase(context.Background(), dbID, params)
+		if err != nil {
+			fmt.Println("Erro ao consultar o banco de dados:", err)
+			break
+		}
+
+		allPages = append(allPages, response.Results...)
+
+		if !response.HasMore {
+			break
+		}
+
+		cursor = *response.NextCursor
+	}
+
 	if err != nil {
 		fmt.Println("Error querying database:", err)
 		return
 	}
 
-	b, err := json.Marshal(pages)
+	b, err := json.Marshal(allPages)
 	if err != nil {
 		log.Fatalf("Error loading database: %s", err)
 	}
-	os.Stdout.Write(b)
+	os.WriteFile("dados.json", []byte(b), 0666)
 
 }
