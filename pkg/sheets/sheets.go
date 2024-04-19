@@ -9,6 +9,7 @@ import (
 
 	"github.com/joho/godotenv"
 	"golang.org/x/oauth2"
+	"golang.org/x/oauth2/google"
 	"google.golang.org/api/option"
 	"google.golang.org/api/sheets/v4"
 )
@@ -21,7 +22,13 @@ func ConnectSheets() {
 
 	ctx := context.Background()
 
-	config := &oauth2.Config{}
+	config := &oauth2.Config{
+		RedirectURL:  "http://localhost:8080/callback",
+		ClientID:     os.Getenv("GOOGLE_CLIENT_ID"),
+		ClientSecret: os.Getenv("GOOGLE_CLIENT_SECRET"),
+		Scopes:       []string{"https://www.googleapis.com/auth/userinfo.email"},
+		Endpoint:     google.Endpoint,
+	}
 
 	token, err := config.Exchange(ctx)
 

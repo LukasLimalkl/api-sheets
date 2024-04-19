@@ -1,9 +1,10 @@
 package main
 
 import (
-	"github.com/LukasLimalkl/api-sheets/pkg/notion"
+	"net/http"
 )
 
 func main() {
-	notion.ConnectNotion()
+	http.ListenAndServe(":8080", nil)
+
 }
