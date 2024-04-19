@@ -51,10 +51,10 @@ func ConnectNotion() {
 		return
 	}
 
-	b, err := json.Marshal(allPages)
+	data, err := json.Marshal(allPages)
 	if err != nil {
 		log.Fatalf("Error loading database: %s", err)
 	}
-	os.WriteFile("dados.json", []byte(b), 0666)
+	os.WriteFile("dados.json", []byte(data), 0666)
 
 }
