@@ -1,9 +1,9 @@
 package main
 
 import (
-	"github.com/LukasLimalkl/api-sheets/pkg/sheets"
+	"github.com/LukasLimalkl/api-sheets/pkg/notion"
 )
 
 func main() {
-	sheets.ConnectSheets()
+	notion.ConnectNotion()
 }
