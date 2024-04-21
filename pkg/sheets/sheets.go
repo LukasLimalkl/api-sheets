@@ -10,7 +10,6 @@ import (
 	"github.com/joho/godotenv"
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/google"
-	"google.golang.org/api/option"
 	"google.golang.org/api/sheets/v4"
 )
 
@@ -30,10 +29,12 @@ func ConnectSheets() {
 		Endpoint:     google.Endpoint,
 	}
 
-	token, err := config.Exchange(ctx)
+	CLIENT_TOKEN := os.Getenv("GOOGLE_CLIENT_SECRET")
+
+	token, err := config.Exchange(ctx, CLIENT_TOKEN)
 
 	sheetKey := os.Getenv("KEY_SHEETS")
-	sheetsService, err := sheets.NewService(ctx, option.WithTokenSource(token))
+	sheetsService, err := sheets.NewService(ctx, token)
 	if err != nil {
 		fmt.Println(err)
 	}
