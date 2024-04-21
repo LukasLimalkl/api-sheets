@@ -30,7 +30,9 @@ func ConnectSheets() {
 		Endpoint:     google.Endpoint,
 	}
 
-	token, err := config.Exchange(ctx)
+	CLIENT_TOKEN := os.Getenv("GOOGLE_CLIENT_SECRET")
+
+	token, err := config.Exchange(ctx, CLIENT_TOKEN)
 
 	sheetKey := os.Getenv("KEY_SHEETS")
 	sheetsService, err := sheets.NewService(ctx, option.WithTokenSource(token))
