@@ -1,10 +1,12 @@
 package main
 
 import (
-	"net/http"
+	"github.com/LukasLimalkl/api-sheets/pkg/notion"
+	"github.com/LukasLimalkl/api-sheets/pkg/sheets"
 )
 
 func main() {
-	http.ListenAndServe(":8080", nil)
+	notion.ConnectNotion()
+	sheets.ConnectSheets()
 
 }

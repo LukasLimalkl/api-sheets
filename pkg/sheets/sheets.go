@@ -7,36 +7,27 @@ import (
 	"log"
 	"os"
 
-	"github.com/joho/godotenv"
-	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/google"
+	"google.golang.org/api/option"
 	"google.golang.org/api/sheets/v4"
 )
 
 func ConnectSheets() {
-	err := godotenv.Load()
-	if err != nil {
-		log.Fatalf("Error loading .env file: %s", err)
-	}
-
 	ctx := context.Background()
-
-	config := &oauth2.Config{
-		RedirectURL:  "http://localhost:8080/callback",
-		ClientID:     os.Getenv("GOOGLE_CLIENT_ID"),
-		ClientSecret: os.Getenv("GOOGLE_CLIENT_SECRET"),
-		Scopes:       []string{"https://www.googleapis.com/auth/userinfo.email"},
-		Endpoint:     google.Endpoint,
+	b, err := os.ReadFile("credentials.json")
+	if err != nil {
+		log.Fatalf("Unable to read client secret file: %v", err)
 	}
 
-	CLIENT_TOKEN := os.Getenv("GOOGLE_CLIENT_SECRET")
-
-	token, err := config.Exchange(ctx, CLIENT_TOKEN)
-
-	sheetKey := os.Getenv("KEY_SHEETS")
-	sheetsService, err := sheets.NewService(ctx, token)
+	config, err := google.ConfigFromJSON(b, "https://www.googleapis.com/auth/spreadsheets")
 	if err != nil {
-		fmt.Println(err)
+		log.Fatalf("Unable to parse client secret file to config: %v", err)
+	}
+	client := getClient(config)
+
+	srv, err := sheets.NewService(ctx, option.WithHTTPClient(client))
+	if err != nil {
+		log.Fatalf("Unable to retrieve Sheets client: %v", err)
 	}
 
 	data, err := os.ReadFile("./dados.json")
@@ -44,25 +35,60 @@ func ConnectSheets() {
 		log.Fatalf("Error reading JSON file: %s", err)
 	}
 
-	var records []map[string]interface{}
-	if err := json.Unmarshal(data, &records); err != nil {
-		log.Fatalf("Error decoding JSON: %s", err)
+	var items []Item
+	if err := json.Unmarshal(data, &items); err != nil {
+		log.Fatalf("Erro ao decodificar JSON: %v", err)
 	}
 
-	var vr sheets.ValueRange
-	for _, record := range records {
-		var row []interface{}
-		for _, value := range record {
-			row = append(row, value)
+	spreadsheetId := "1lDmBM9Aap2l1MGMjyFgilSwk5lzrbC7TjR3DvZPLH48"
+
+	var values [][]interface{}
+	for _, item := range items {
+		row := []interface{}{
+			item.Properties.Card.Prefix + item.Properties.Card.Number,
+			item.Properties.Post.Text,
+			item.Properties.Responsavel.Name,
+			item.Properties.Departamento.Name,
+			item.Properties.FluxoCinema.Name,
+			item.Properties.FluxoDesigner.Name,
+			item.Properties.StatusDoCard.Name,
+			item.Properties.TipoDoEntregavel.Name,
+			item.Properties.Demanda.Name,
+			formatDate(item.Properties.DataDePostagem.Start),
+			formatDate(item.Properties.Fabricacao.Start),
+			formatInterface(item.Properties.UltimaEdicao),
+			item.Created,
 		}
-		vr.Values = append(vr.Values, row)
+		values = append(values, row)
 	}
 
-	dataRange := "A1"
+	fmt.Println(values)
 
-	_, err = sheetsService.Spreadsheets.Values.Append(sheetKey, dataRange, &vr).ValueInputOption("USER_ENTERED").Do()
+	sheetid := 0
+
+	response1, err := srv.Spreadsheets.Get(spreadsheetId).Fields("sheets(properties(sheetId,title))").Do()
+	if err != nil || response1.HTTPStatusCode != 200 {
+		log.Fatalf("Unable to retrieve sheet: %v", err)
+	}
+	sheetName := ""
+	for _, v := range response1.Sheets {
+		prop := v.Properties
+		sheetID := prop.SheetId
+		if sheetID == int64(sheetid) {
+			sheetName = prop.Title
+			break
+		}
+	}
+
+	valueInputOption := "USER_ENTERED"
+	insertDataOption := "INSERT_ROWS"
+	rb := &sheets.ValueRange{
+		Values: values,
+	}
+	_, err = srv.Spreadsheets.Values.Append(spreadsheetId, sheetName, rb).ValueInputOption(valueInputOption).InsertDataOption(insertDataOption).Context(ctx).Do()
 	if err != nil {
-		log.Fatalf("Unable to write data to sheet: %v", err)
+		log.Fatalf("Unable to append values: %v", err)
 	}
 
+	fmt.Println("Dados inseridos com sucesso na planilha!")
 }
