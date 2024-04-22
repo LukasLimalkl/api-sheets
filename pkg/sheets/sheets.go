@@ -36,7 +36,7 @@ func ConnectSheets() {
 	}
 
 	var items []Item
-	if err := json.Unmarshal(data, &items); err != nil {
+	if err := json.Unmarshal([]byte(data), &items); err != nil {
 		log.Fatalf("Erro ao decodificar JSON: %v", err)
 	}
 
@@ -59,10 +59,10 @@ func ConnectSheets() {
 			formatInterface(item.Properties.UltimaEdicao),
 			item.Created,
 		}
+		fmt.Println(values)
+
 		values = append(values, row)
 	}
-
-	fmt.Println(values)
 
 	sheetid := 0
 
