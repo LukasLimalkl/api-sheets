@@ -35,8 +35,8 @@ func ConnectSheets() {
 		log.Fatalf("Error reading JSON file: %s", err)
 	}
 
-	var items []Item
-	if err := json.Unmarshal([]byte(data), &items); err != nil {
+	var items []Items
+	if err := json.Unmarshal(data, &items); err != nil {
 		log.Fatalf("Erro ao decodificar JSON: %v", err)
 	}
 
@@ -45,21 +45,8 @@ func ConnectSheets() {
 	var values [][]interface{}
 	for _, item := range items {
 		row := []interface{}{
-			item.Properties.Card.Prefix + item.Properties.Card.Number,
-			item.Properties.Post.Text,
-			item.Properties.Responsavel.Name,
-			item.Properties.Departamento.Name,
-			item.Properties.FluxoCinema.Name,
-			item.Properties.FluxoDesigner.Name,
-			item.Properties.StatusDoCard.Name,
-			item.Properties.TipoDoEntregavel.Name,
-			item.Properties.Demanda.Name,
-			formatDate(item.Properties.DataDePostagem.Start),
-			formatDate(item.Properties.Fabricacao.Start),
-			formatInterface(item.Properties.UltimaEdicao),
-			item.Created,
+			item,
 		}
-		fmt.Println(values)
 
 		values = append(values, row)
 	}

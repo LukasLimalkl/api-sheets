@@ -1,10 +1,18 @@
 package sheets
 
-type Item struct {
-	ID      string `json:"id"`
-	Created string `json:"created_time"`
-	Edited  string `json:"last_edited_time"`
-	Parent  struct {
+import "time"
+
+type Items []struct {
+	ID          string    `json:"id"`
+	CreatedTime time.Time `json:"created_time"`
+	CreatedBy   struct {
+		ID string `json:"id"`
+	} `json:"created_by"`
+	LastEditedTime time.Time `json:"last_edited_time"`
+	LastEditedBy   struct {
+		ID string `json:"id"`
+	} `json:"last_edited_by"`
+	Parent struct {
 		Type       string `json:"type"`
 		DatabaseID string `json:"database_id"`
 	} `json:"parent"`
@@ -17,52 +25,137 @@ type Item struct {
 	Cover struct {
 		Type string `json:"type"`
 		File struct {
-			URL        string `json:"url"`
-			ExpiryTime string `json:"expiry_time"`
+			URL        string    `json:"url"`
+			ExpiryTime time.Time `json:"expiry_time"`
 		} `json:"file"`
-	} `json:"cover"`
+	} `json:"cover,omitempty"`
 	Properties struct {
-		Campanha         Relation    `json:"Campanha"`
-		Card             UniqueID    `json:"Card"`
-		Bm               Select      `json:"Bm"`
-		CardCriativo     Relation    `json:"Card Criativo"`
-		Cliente          Relation    `json:"Cliente"`
-		CriadoEm         interface{} `json:"Criado em"`
-		DataDePostagem   Date        `json:"Data de Postagem"`
-		Demanda          Select      `json:"Demanda"`
-		Departamento     Select      `json:"Departamento"`
-		Fabricacao       Date        `json:"Fabricação"`
-		FluxoCinema      Status      `json:"Fluxo - Cinema"`
-		FluxoDesigner    Status      `json:"Fluxo - Designer"`
-		Post             Title       `json:"Post"`
-		Responsavel      Select      `json:"Responsável"`
-		StatusDoCard     Status      `json:"Status do Card"`
-		TipoDoEntregavel Select      `json:"Tipo do Entregável"`
-		UltimaEdicao     interface{} `json:"Última edição"`
+		BM struct {
+			ID     string `json:"id"`
+			Type   string `json:"type"`
+			Select struct {
+				ID    string `json:"id"`
+				Name  string `json:"name"`
+				Color string `json:"color"`
+			} `json:"select"`
+		} `json:"BM"`
+		Campanha struct {
+			ID       string `json:"id"`
+			Type     string `json:"type"`
+			Relation []struct {
+				ID string `json:"id"`
+			} `json:"relation"`
+		} `json:"Campanha"`
+		Card struct {
+			ID   string `json:"id"`
+			Type string `json:"type"`
+		} `json:"Card"`
+		CardCriativo struct {
+			ID   string `json:"id"`
+			Type string `json:"type"`
+		} `json:"Card Criativo"`
+		Cliente struct {
+			ID   string `json:"id"`
+			Type string `json:"type"`
+		} `json:"Cliente"`
+		CriadoEm struct {
+			ID          string    `json:"id"`
+			Type        string    `json:"type"`
+			CreatedTime time.Time `json:"created_time"`
+		} `json:"Criado em"`
+		DataDePostagem struct {
+			ID   string `json:"id"`
+			Type string `json:"type"`
+			Date struct {
+				Start string `json:"start"`
+			} `json:"date"`
+		} `json:"Data de Postagem"`
+		Demanda struct {
+			ID     string `json:"id"`
+			Type   string `json:"type"`
+			Select struct {
+				ID    string `json:"id"`
+				Name  string `json:"name"`
+				Color string `json:"color"`
+			} `json:"select"`
+		} `json:"Demanda"`
+		Departamento struct {
+			ID     string `json:"id"`
+			Type   string `json:"type"`
+			Select struct {
+				ID    string `json:"id"`
+				Name  string `json:"name"`
+				Color string `json:"color"`
+			} `json:"select"`
+		} `json:"Departamento"`
+		FabricaO struct {
+			ID   string `json:"id"`
+			Type string `json:"type"`
+		} `json:"Fabricação"`
+		FluxoCinema struct {
+			ID     string `json:"id"`
+			Type   string `json:"type"`
+			Status struct {
+				ID    string `json:"id"`
+				Name  string `json:"name"`
+				Color string `json:"color"`
+			} `json:"status"`
+		} `json:"Fluxo - Cinema"`
+		FluxoDesigner struct {
+			ID     string `json:"id"`
+			Type   string `json:"type"`
+			Status struct {
+				ID    string `json:"id"`
+				Name  string `json:"name"`
+				Color string `json:"color"`
+			} `json:"status"`
+		} `json:"Fluxo - Designer"`
+		Post struct {
+			ID    string `json:"id"`
+			Type  string `json:"type"`
+			Title []struct {
+				Type        string `json:"type"`
+				Annotations struct {
+					Bold  bool   `json:"bold"`
+					Color string `json:"color"`
+				} `json:"annotations"`
+				PlainText string `json:"plain_text"`
+				Text      struct {
+					Content string `json:"content"`
+				} `json:"text"`
+			} `json:"title"`
+		} `json:"Post"`
+		ResponsVel struct {
+			ID     string `json:"id"`
+			Type   string `json:"type"`
+			Select struct {
+				ID    string `json:"id"`
+				Name  string `json:"name"`
+				Color string `json:"color"`
+			} `json:"select"`
+		} `json:"Responsável"`
+		StatusDoCard struct {
+			ID     string `json:"id"`
+			Type   string `json:"type"`
+			Status struct {
+				ID    string `json:"id"`
+				Name  string `json:"name"`
+				Color string `json:"color"`
+			} `json:"status"`
+		} `json:"Status do Card"`
+		TipoDoEntregVel struct {
+			ID     string `json:"id"`
+			Type   string `json:"type"`
+			Select struct {
+				ID    string `json:"id"`
+				Name  string `json:"name"`
+				Color string `json:"color"`
+			} `json:"select"`
+		} `json:"Tipo do Entregável"`
+		LtimaEdiO struct {
+			ID             string    `json:"id"`
+			Type           string    `json:"type"`
+			LastEditedTime time.Time `json:"last_edited_time"`
+		} `json:"Última edição"`
 	} `json:"properties"`
-}
-
-type Title struct {
-	Text string `json:"text"`
-}
-
-type Relation struct {
-	ID string `json:"id"`
-}
-
-type UniqueID struct {
-	Prefix string `json:"prefix"`
-	Number string `json:"number"`
-}
-
-type Select struct {
-	Name string `json:"name"`
-}
-
-type Status struct {
-	Name string `json:"name"`
-}
-
-type Date struct {
-	Start string `json:"start"`
 }

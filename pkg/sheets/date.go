@@ -2,13 +2,21 @@ package sheets
 
 import "time"
 
-func formatDate(dateString string) string {
-	// Converter a string de data para o formato de data e hora do Go
-	date, err := time.Parse(time.RFC3339, dateString)
+func formatDateProperty(dateStr string) string {
+	t, err := time.Parse(time.RFC3339, dateStr)
 	if err != nil {
-		return "" // Retornar uma string vazia em caso de erro
+		return ""
 	}
+	t = t.AddDate(0, 0, 1)
+	loc, _ := time.LoadLocation("America/Araguaina")
+	return t.In(loc).Format("02/01/2006")
+}
 
-	// Formatar a data no formato desejado
-	return date.Format("2006-01-02 15:04:05")
+func formatTimeProperty(timeStr string) string {
+	t, err := time.Parse(time.RFC3339, timeStr)
+	if err != nil {
+		return ""
+	}
+	loc, _ := time.LoadLocation("America/Araguaina")
+	return t.In(loc).Format("02/01/2006 15:04:05")
 }

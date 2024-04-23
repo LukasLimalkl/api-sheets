@@ -51,10 +51,14 @@ func ConnectNotion() {
 		return
 	}
 
-	data, err := json.Marshal(allPages)
+	data, err := json.MarshalIndent(allPages, "", "  ")
 	if err != nil {
-		log.Fatalf("Error loading database: %s", err)
+		log.Fatalf("Error marshaling data to JSON: %s", err)
 	}
-	os.WriteFile("dados.json", []byte(data), 0666)
+
+	err = os.WriteFile("dados.json", data, 0666)
+	if err != nil {
+		log.Fatalf("Error writing to file: %s", err)
+	}
 
 }
