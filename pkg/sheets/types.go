@@ -30,7 +30,7 @@ type Items []struct {
 		} `json:"file"`
 	} `json:"cover,omitempty"`
 	Properties struct {
-		BM struct {
+		Bm struct {
 			ID     string `json:"id"`
 			Type   string `json:"type"`
 			Select struct {
@@ -116,7 +116,6 @@ type Items []struct {
 			Title []struct {
 				Type        string `json:"type"`
 				Annotations struct {
-					Bold  bool   `json:"bold"`
 					Color string `json:"color"`
 				} `json:"annotations"`
 				PlainText string `json:"plain_text"`
