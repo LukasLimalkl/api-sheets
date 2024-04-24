@@ -3,8 +3,6 @@ module github.com/LukasLimalkl/api-sheets
 go 1.22.0
 
 require (
-	github.com/dstotijn/go-notion v0.11.0
-	github.com/joho/godotenv v1.5.1
 	golang.org/x/oauth2 v0.19.0
 	google.golang.org/api v0.174.0
 )
