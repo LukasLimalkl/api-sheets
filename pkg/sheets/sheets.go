@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"net/url"
 	"os"
 
 	"golang.org/x/oauth2/google"
@@ -44,10 +45,18 @@ func ConnectSheets() {
 
 	var values [][]interface{}
 	for _, item := range items {
-		row := []interface{}{
-			item.Properties.Bm.Select.Name,
+		cripto := item.Properties.Card.ID
+		decoded, err := url.QueryUnescape(cripto)
+		if err != nil {
+			fmt.Println("Erro ao decodificar:", err)
+			return
 		}
-		fmt.Println(values)
+
+		row := []interface{}{
+			decoded,
+			item.Properties.Bm.Select.Name,
+			item.Properties.DataDePostagem.Date.Start,
+		}
 		values = append(values, row)
 	}
 
