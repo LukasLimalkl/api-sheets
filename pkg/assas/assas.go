@@ -1,1 +1,5 @@
 package assas
+
+func Assas() {
+
+}
