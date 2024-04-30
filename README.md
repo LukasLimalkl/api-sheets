@@ -1,46 +1,56 @@
-Notion to Google Sheets Integration
-Descrição
-Este projeto oferece uma solução automatizada para exportar dados de um banco de dados do Notion para o Google Sheets. Ideal para equipes e indivíduos que precisam sincronizar informações entre estas duas plataformas populares, facilitando a visualização, manipulação e análise de dados. A integração é realizada através de um script Python que acessa a API do Notion para extrair dados e a API do Google Sheets para inseri-los em uma planilha especificada.
+# Notion to Google Sheets Integration (GoLang Version)
 
-Recursos
-Extração de dados de bancos de dados do Notion usando a API do Notion.
-Envio automático de dados para o Google Sheets.
-Configuração flexível para diferentes estruturas de banco de dados.
-Agendamento opcional para atualizações automáticas.
-Pré-requisitos
-Antes de iniciar, certifique-se de que você possui:
+## Description
 
-Python 3.8 ou superior.
-Acesso ao Notion e uma integração API configurada.
-Acesso ao Google Sheets e credenciais de API configuradas.
-Configuração
-Configuração do Ambiente
-Clone o repositório:
-bash
-Copy code
-git clone https://github.com/seu-usuario/seu-repositorio.git
-cd seu-repositorio
+This project provides an automated solution for exporting data from a Notion database to Google Sheets, ideal for teams and individuals who need to synchronize information between these two popular platforms for enhanced data visualization, manipulation, and analysis. The integration is carried out via a Go application that utilizes the Notion and Google Sheets APIs.
 
-Configurando as Credenciais do Notion
-Obtenha o token de integração da API do Notion seguindo as instruções aqui.
-Crie um arquivo .env na raiz do projeto e adicione seu token:
-makefile
-Copy code
-NOTION_TOKEN=<Seu_Token_Aqui>
-Configurando as Credenciais do Google Sheets
-Siga as instruções para criar um projeto no Google Cloud, habilitar a API do Sheets e obter as credenciais de acesso em formato JSON aqui.
-Salve o arquivo JSON das credenciais na raiz do projeto.
-Adicione o caminho do arquivo de credenciais ao seu arquivo .env:
-makefile
-Copy code
-GOOGLE_APPLICATION_CREDENTIALS=<caminho_para_suas_credenciais.json>
-Uso
-Para executar o script e sincronizar os dados, use o seguinte comando:
+## Features
 
-bash
-Copy code
-python main.py
-Contribuindo
-Contribuições são sempre bem-vindas! Se você tem uma sugestão para melhorar esta integração, sinta-se à vontade para fazer um fork do repositório e enviar um pull request, ou abrir um issue com as tags "melhoria" ou "bug".
+- Data extraction from Notion databases using the Notion API.
+- Automatic data uploading to Google Sheets.
+- Flexible configuration for varying database schemas.
+- Optional scheduling for automatic updates.
+
+## Prerequisites
+
+Before you begin, ensure you have:
+- Go 1.15 or higher.
+- Access to Notion with an API integration set up.
+- Access to Google Sheets with API credentials configured.
+
+## Setup
+
+### Environment Setup
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/lukaslimalkl/api-sheets
+   cd api-sheets
+
+2. Download the dependencies:
+   ```bash
+   go mod tidy
+
+### Setting Up Notion Credentials
+
+1. Obtain the integration token from Notion by following the instructions here.
+2. Create a .env file in the root of the project and add your token:
+   ```bash
+    API_NOTION="YOU_NOTION_API"
+    DB_NOTION="YOU_NOTION_DB"
+    GOOGLE_CLIENT_ID="YOU_SHEETS_ID"
+    GOOGLE_CLIENT_SECRET="YOU_SHEET_SECRET"
+
+### Usage
+
+1. To run the application and sync the data, use the following command:
+    ```bash
+     go run cmd/main.go
+
+### Contributing
+
+  Contributions are welcome! If you have suggestions for improving this integration, feel free to fork the repository and submit a pull request, or open an issue with the tags "enhancement" or "bug".
+
+
 
 
