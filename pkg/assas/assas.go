@@ -1,5 +1,0 @@
-package assas
-
-func Assas() {
-
-}
