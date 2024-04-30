@@ -1,5 +1,4 @@
-# Notion to Google Sheets Integration (GoLang Version)
-
+# Notion to Google Sheets Integration 
 ## Description
 
 This project provides an automated solution for exporting data from a Notion database to Google Sheets, ideal for teams and individuals who need to synchronize information between these two popular platforms for enhanced data visualization, manipulation, and analysis. The integration is carried out via a Go application that utilizes the Notion and Google Sheets APIs.
