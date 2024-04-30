@@ -1,12 +1,12 @@
 package main
 
 import (
-	"github.com/LukasLimalkl/api-sheets/pkg/assas"
+	"github.com/LukasLimalkl/api-sheets/pkg/notion"
 	"github.com/LukasLimalkl/api-sheets/pkg/sheets"
 )
 
 func main() {
-	assas.Assas()
+	notion.ConnectNotion()
 	sheets.ConnectSheets()
 
 }
